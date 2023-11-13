@@ -1,0 +1,5 @@
+db.user: postgres
+db.password: postgres
+db.url: jdbc:postgresql://localhost:5432/custom_cache
+db.driver: org.postgresql.Driver
+db.pool.size: 10
