@@ -3,7 +3,7 @@ package by.stolybko.service;
 import by.stolybko.dao.UserDao;
 import by.stolybko.dto.UserDTO;
 import by.stolybko.dto.UserShowDTO;
-import by.stolybko.entity.User;
+import by.stolybko.entity.UserEntity;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class UserService {
 
     public UserShowDTO getUserById(Long id) throws SQLException {
 
-        Optional<User> user = userDao.findById(id);
+        Optional<UserEntity> user = userDao.findById(id);
         if(user.isEmpty()) {
             throw new SQLException();
         }
@@ -29,27 +29,27 @@ public class UserService {
 
     public List<UserShowDTO> getAll() {
         List<UserShowDTO> users = new ArrayList<>();
-        for(User user : userDao.findAll()) {
+        for(UserEntity user : userDao.findAll()) {
             users.add(mapUserShowDTO(user));
         }
         return users;
     }
 
     public UserShowDTO save(UserDTO user) {
-        User userSawed = userDao.save(mapUser(user)).get();
+        UserEntity userSawed = userDao.save(mapUser(user)).get();
         return mapUserShowDTO(userSawed);
     }
 
     public UserShowDTO update(UserDTO userDTO, Long id) {
 
-        User user = User.builder()
+        UserEntity user = UserEntity.builder()
                 .id(id)
                 .fullName(userDTO.getFullName())
                 .passportNumber(userDTO.getPassportNumber())
                 .password(userDTO.getPassword())
                 .build();
 
-        User userSawed = userDao.update(user).get();
+        UserEntity userSawed = userDao.update(user).get();
         return mapUserShowDTO(userSawed);
     }
 
@@ -60,7 +60,7 @@ public class UserService {
         return userDao.delete(id);
     }
 
-    private UserShowDTO mapUserShowDTO(User user) {
+    private UserShowDTO mapUserShowDTO(UserEntity user) {
         return UserShowDTO.builder()
                 .id(user.getId())
                 .fullName(user.getFullName())
@@ -68,8 +68,8 @@ public class UserService {
                 .build();
     }
 
-    private User mapUser (UserDTO user) {
-        return User.builder()
+    private UserEntity mapUser (UserDTO user) {
+        return UserEntity.builder()
                 .fullName(user.getFullName())
                 .passportNumber(user.getPassportNumber())
                 .password(user.getPassword())

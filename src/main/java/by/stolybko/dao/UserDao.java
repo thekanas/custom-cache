@@ -1,7 +1,7 @@
 package by.stolybko.dao;
 
 import by.stolybko.connection.ConnectionPool;
-import by.stolybko.entity.User;
+import by.stolybko.entity.UserEntity;
 import lombok.NoArgsConstructor;
 
 import java.sql.Connection;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public class UserDao extends Dao<Long, User>{
+public class UserDao extends Dao<Long, UserEntity>{
     private static final String SELECT_ALL = "SELECT user_id, full_name, passport_number FROM users";
     private static final String SELECT_BY_ID = SELECT_ALL + " WHERE user_id = ?";
     private static final String INSERT = "INSERT INTO users (full_name, passport_number, password) VALUES(?,?,?)";
@@ -29,8 +29,8 @@ public class UserDao extends Dao<Long, User>{
     }
 
     @Override
-    public List<User> findAll() {
-        List<User> users = new ArrayList<>();
+    public List<UserEntity> findAll() {
+        List<UserEntity> users = new ArrayList<>();
 
         try(Connection connection = ConnectionPool.get();
             Statement statement = connection.createStatement()) {
@@ -38,7 +38,7 @@ public class UserDao extends Dao<Long, User>{
             ResultSet resultSet = statement.executeQuery(SELECT_ALL);
 
             while (resultSet.next()) {
-                users.add(User.builder()
+                users.add(UserEntity.builder()
                         .id(resultSet.getLong("user_id"))
                         .fullName(resultSet.getString("full_name"))
                         .passportNumber(resultSet.getString("passport_number"))
@@ -51,14 +51,14 @@ public class UserDao extends Dao<Long, User>{
     }
 
     @Override
-    public Optional<User> findById(Long id) {
+    public Optional<UserEntity> findById(Long id) {
         try (Connection connection = ConnectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID)) {
 
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            return resultSet.next() ? Optional.of(User.builder()
+            return resultSet.next() ? Optional.of(UserEntity.builder()
                     .id(resultSet.getLong("user_id"))
                     .fullName(resultSet.getString("full_name"))
                     .passportNumber(resultSet.getString("passport_number"))
@@ -72,7 +72,7 @@ public class UserDao extends Dao<Long, User>{
     }
 
     @Override
-    public Optional<User> save(User entity) {
+    public Optional<UserEntity> save(UserEntity entity) {
         try (Connection connection = ConnectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -95,7 +95,7 @@ public class UserDao extends Dao<Long, User>{
     }
 
     @Override
-    public Optional<User> update(User entity) {
+    public Optional<UserEntity> update(UserEntity entity) {
         try (Connection connection = ConnectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
 
