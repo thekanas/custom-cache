@@ -16,14 +16,15 @@ import java.util.Optional;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public class UserDao extends Dao<Long, UserEntity>{
-    private static final String SELECT_ALL = "SELECT user_id, full_name, passport_number FROM users";
+public class UserDao extends Dao<Long, UserEntity> {
+    private static final String SELECT_ALL = "SELECT user_id, full_name, passport_number, email FROM users";
     private static final String SELECT_BY_ID = SELECT_ALL + " WHERE user_id = ?";
-    private static final String INSERT = "INSERT INTO users (full_name, passport_number, password) VALUES(?,?,?)";
-    private static final String UPDATE = "UPDATE users SET full_name = ?, passport_number = ?, password = ? WHERE user_id = ?";
+    private static final String INSERT = "INSERT INTO users (full_name, passport_number, email, password) VALUES(?,?,?,?)";
+    private static final String UPDATE = "UPDATE users SET full_name = ?, passport_number = ?, email = ?, password = ? WHERE user_id = ?";
     private static final String DELETE_BY_ID = "DELETE FROM users WHERE user_id =?";
 
     private static final UserDao INSTANCE = new UserDao();
+
     public static UserDao getInstance() {
         return INSTANCE;
     }
@@ -32,9 +33,8 @@ public class UserDao extends Dao<Long, UserEntity>{
     public List<UserEntity> findAll() {
         List<UserEntity> users = new ArrayList<>();
 
-        try(Connection connection = ConnectionPool.get();
-            Statement statement = connection.createStatement()) {
-
+        try (Connection connection = ConnectionPool.get();
+             Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL);
 
             while (resultSet.next()) {
@@ -42,6 +42,7 @@ public class UserDao extends Dao<Long, UserEntity>{
                         .id(resultSet.getLong("user_id"))
                         .fullName(resultSet.getString("full_name"))
                         .passportNumber(resultSet.getString("passport_number"))
+                        .email("email")
                         .build());
             }
         } catch (SQLException e) {
@@ -62,6 +63,7 @@ public class UserDao extends Dao<Long, UserEntity>{
                     .id(resultSet.getLong("user_id"))
                     .fullName(resultSet.getString("full_name"))
                     .passportNumber(resultSet.getString("passport_number"))
+                    .email(resultSet.getString("email"))
                     .build())
                     : Optional.empty();
 
@@ -78,7 +80,8 @@ public class UserDao extends Dao<Long, UserEntity>{
 
             preparedStatement.setString(1, entity.getFullName());
             preparedStatement.setString(2, entity.getPassportNumber());
-            preparedStatement.setObject(3, entity.getPassword());
+            preparedStatement.setString(3, entity.getEmail());
+            preparedStatement.setObject(4, entity.getPassword());
             preparedStatement.executeUpdate();
 
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
@@ -101,8 +104,9 @@ public class UserDao extends Dao<Long, UserEntity>{
 
             preparedStatement.setString(1, entity.getFullName());
             preparedStatement.setString(2, entity.getPassportNumber());
-            preparedStatement.setObject(3, entity.getPassword());
-            preparedStatement.setLong(4, entity.getId());
+            preparedStatement.setString(3, entity.getEmail());
+            preparedStatement.setObject(4, entity.getPassword());
+            preparedStatement.setLong(5, entity.getId());
             preparedStatement.executeUpdate();
 
             return Optional.of(entity);

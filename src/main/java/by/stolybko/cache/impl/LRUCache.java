@@ -9,32 +9,32 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
 
-public class LRUCache<T extends BaseEntity<V>, V extends Serializable> {
+public class LRUCache {
 
-    private final Map<V, T> mapCache = new HashMap<>();
-    private final Deque<V> deque = new LinkedList<>();
+    private final Map<Long, Object> mapCache = new HashMap<>();
+    private final Deque<Long> deque = new LinkedList<>();
     private final int CACHE_CAPACITY;
 
     public LRUCache(int cache_capacity) {
         CACHE_CAPACITY = cache_capacity;
     }
 
-    public Optional<T> getFromCache(V key) {
-        T current = null;
+    public Object getFromCache(Long key) {
+       Object current = null;
 
         if (mapCache.containsKey(key)) {
             current = mapCache.get(key);
-            deque.remove(current.getId());
-            deque.addFirst(current.getId());
+            deque.remove(key);
+            deque.addFirst(key);
         }
         return Optional.ofNullable(current);
     }
 
-    public void putInCache(V key, T value) {
+    public void putInCache(Long key, Object value) {
         if (mapCache.containsKey(key)) {
             deque.remove(key);
         } else if (deque.size() == CACHE_CAPACITY) {
-            V temp = deque.removeLast();
+            Long temp = deque.removeLast();
             mapCache.remove(temp);
         }
         deque.addFirst(key);
