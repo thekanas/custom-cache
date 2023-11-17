@@ -1,9 +1,12 @@
 package by.stolybko.service;
 
 import by.stolybko.dao.UserDao;
-import by.stolybko.dto.UserDTO;
-import by.stolybko.dto.UserShowDTO;
+import by.stolybko.dto.UserRequestDTO;
+import by.stolybko.dto.UserResponseDTO;
 import by.stolybko.entity.UserEntity;
+import by.stolybko.mapper.UserMapper;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,13 +15,14 @@ import java.util.Optional;
 
 public class UserService {
     private final UserDao userDao = UserDao.getInstance();
+    private final UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
     private static final UserService INSTANCE = new UserService();
     public static UserService getInstance() {
         return INSTANCE;
     }
 
-    public UserShowDTO getUserById(Long id) throws SQLException {
+    public UserResponseDTO getUserById(Long id) throws SQLException {
 
         Optional<UserEntity> user = userDao.findById(id);
         if(user.isEmpty()) {
@@ -27,20 +31,20 @@ public class UserService {
         return mapUserShowDTO(user.get());
     }
 
-    public List<UserShowDTO> getAll() {
-        List<UserShowDTO> users = new ArrayList<>();
+    public List<UserResponseDTO> getAll() {
+        List<UserResponseDTO> users = new ArrayList<>();
         for(UserEntity user : userDao.findAll()) {
             users.add(mapUserShowDTO(user));
         }
         return users;
     }
 
-    public UserShowDTO save(UserDTO user) {
-        UserEntity userSawed = userDao.save(mapUser(user)).get();
-        return mapUserShowDTO(userSawed);
+    public UserResponseDTO save(UserRequestDTO user) {
+        UserEntity userSawed = userDao.save(mapper.toUserEntity(user)).get();
+        return mapper.toUserResponseDTO(userSawed);
     }
 
-    public UserShowDTO update(UserDTO userDTO, Long id) {
+    public UserResponseDTO update(UserRequestDTO userDTO, Long id) {
 
         UserEntity user = UserEntity.builder()
                 .id(id)
@@ -60,15 +64,15 @@ public class UserService {
         return userDao.delete(id);
     }
 
-    private UserShowDTO mapUserShowDTO(UserEntity user) {
-        return UserShowDTO.builder()
+    private UserResponseDTO mapUserShowDTO(UserEntity user) {
+        return UserResponseDTO.builder()
                 .id(user.getId())
                 .fullName(user.getFullName())
                 .passportNumber(user.getPassportNumber())
                 .build();
     }
 
-    private UserEntity mapUser (UserDTO user) {
+    private UserEntity mapUser (UserRequestDTO user) {
         return UserEntity.builder()
                 .fullName(user.getFullName())
                 .passportNumber(user.getPassportNumber())

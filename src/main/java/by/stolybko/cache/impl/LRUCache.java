@@ -1,15 +1,13 @@
 package by.stolybko.cache.impl;
 
-import by.stolybko.entity.BaseEntity;
-
-import java.io.Serializable;
+import by.stolybko.cache.Cache;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
 
-public class LRUCache {
+public class LRUCache implements Cache {
 
     private final Map<Long, Object> mapCache = new HashMap<>();
     private final Deque<Long> deque = new LinkedList<>();
@@ -19,6 +17,7 @@ public class LRUCache {
         CACHE_CAPACITY = cache_capacity;
     }
 
+    @Override
     public Object getFromCache(Long key) {
        Object current = null;
 
@@ -30,6 +29,7 @@ public class LRUCache {
         return Optional.ofNullable(current);
     }
 
+    @Override
     public void putInCache(Long key, Object value) {
         if (mapCache.containsKey(key)) {
             deque.remove(key);

@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Builder
 @EqualsAndHashCode(of = "id")
-public class UserShowDTO {
+public class UserResponseDTO {
         private Long id;
         private String fullName;
         private String passportNumber;

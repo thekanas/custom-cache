@@ -6,8 +6,8 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Builder
-@EqualsAndHashCode(of = "id")
-public class UserEntity implements BaseEntity<Long> {
+@EqualsAndHashCode(of = "id", callSuper = false)
+public class UserEntity extends BaseEntity {
 
     private Long id;
     private String fullName;

@@ -1,9 +1,9 @@
 package by.stolybko.entity;
 
-import java.io.Serializable;
+import lombok.Data;
 
-public interface BaseEntity<T extends Serializable> {
+@Data
+public abstract class BaseEntity {
 
-    T getId();
-
+    Long id;
 }
