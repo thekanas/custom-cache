@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class Dao<K extends Serializable, E> {
+public interface Dao<K extends Serializable, E> {
 
-    public abstract List<E> findAll();
-    public abstract Optional<E> findById(K id);
-    public abstract Optional<E> save(E entity);
-    public abstract Optional<E> update(E entity);
-    public abstract boolean delete(K id);
+    List<E> findAll();
+    Optional<E> findById(K id);
+    Optional<E> save(E entity);
+    Optional<E> update(E entity);
+    boolean delete(K id);
 }
