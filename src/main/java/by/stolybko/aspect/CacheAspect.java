@@ -1,11 +1,9 @@
 package by.stolybko.aspect;
 
 import by.stolybko.cache.Cache;
-import by.stolybko.cache.impl.LFUCache;
-import by.stolybko.cache.impl.LRUCache;
+import by.stolybko.cache.CacheFactory;
 import by.stolybko.entity.BaseEntity;
-import by.stolybko.entity.UserEntity;
-import org.aspectj.lang.JoinPoint;
+import by.stolybko.util.PropertiesManager;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
@@ -17,7 +15,7 @@ import java.util.Optional;
 @Aspect
 public class CacheAspect {
 
-    Cache cache = new LFUCache(3);
+    private final Cache cache = CacheFactory.getCache(PropertiesManager.get("cacheAlgorithm"));
 
     @Pointcut("within(by.stolybko.dao.*Dao)")
     public void isDaoLayer() {
@@ -39,7 +37,6 @@ public class CacheAspect {
     public void deleteDaoMethod() {
     }
 
-    //@SuppressWarnings("unchecked")
     @Around(value = "findByIdDaoMethod()")
     public Object cachingFindById(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
@@ -65,6 +62,22 @@ public class CacheAspect {
             cache.putInCache(entity.get().getId(), entity.get());
             System.out.println("put in cache");
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    @AfterReturning(value = "updateDaoMethod()" , returning = "result")
+    public void cachingUpdate(Object result) {
+        Optional<BaseEntity> entity = (Optional<BaseEntity>) result;
+        if(entity.isPresent()) {
+            cache.putInCache(entity.get().getId(), entity.get());
+            System.out.println("put in cache");
+        }
+    }
+
+    @AfterReturning(value = "deleteDaoMethod() && args(id) ", argNames = "id")
+    public void cachingUpdate(Long id) {
+            cache.removeFromCache(id);
+            System.out.println("remove from cache");
     }
 
 }

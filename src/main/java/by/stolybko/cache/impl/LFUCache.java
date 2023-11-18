@@ -59,6 +59,16 @@ public class LFUCache implements Cache {
         minFreq = 1L;
     }
 
+    @Override
+    public void removeFromCache(Long key) {
+        nodes.remove(key);
+        Long currentFreq = freq.remove(key);
+        if(lists.get(currentFreq).size == 0) {
+            lists.remove(currentFreq);
+        }
+        size--;
+    }
+
     private void updateFrequency(Long key) {
         Node prevNode = nodes.get(key);
         Long prevFreq = freq.get(key);

@@ -26,7 +26,7 @@ ext {
 
 dependencies {
     runtimeOnly 'org.postgresql:postgresql:42.6.0'
-
+    implementation 'org.liquibase:liquibase-core:4.25.0'
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     implementation 'org.apache.tomcat:tomcat-jdbc:10.1.13'

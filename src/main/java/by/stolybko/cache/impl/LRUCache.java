@@ -40,4 +40,10 @@ public class LRUCache implements Cache {
         deque.addFirst(key);
         mapCache.put(key, value);
     }
+
+    @Override
+    public void removeFromCache(Long key) {
+        mapCache.remove(key);
+        deque.remove(key);
+    }
 }
