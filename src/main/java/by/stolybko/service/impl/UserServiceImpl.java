@@ -12,6 +12,7 @@ import by.stolybko.service.UserService;
 import by.stolybko.validator.UserDtoValidator;
 import by.stolybko.validator.ValidationResult;
 import org.mapstruct.factory.Mappers;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserDtoValidator validator = UserDtoValidator.getInstance();
 
     private static final UserServiceImpl INSTANCE = new UserServiceImpl();
+
     public static UserServiceImpl getInstance() {
         return INSTANCE;
     }
@@ -31,7 +33,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO getUserById(Long id) {
 
         Optional<UserEntity> user = userDao.findById(id);
-        if(user.isEmpty()) {
+        if (user.isEmpty()) {
             throw new UserNotFoundException(id);
         }
         return mapper.toUserResponseDTO(user.get());
@@ -40,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseDTO> getAll() {
         List<UserResponseDTO> users = new ArrayList<>();
-        for(UserEntity user : userDao.findAll()) {
+        for (UserEntity user : userDao.findAll()) {
             users.add(mapper.toUserResponseDTO(user));
         }
         return users;

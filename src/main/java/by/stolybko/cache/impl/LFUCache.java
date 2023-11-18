@@ -11,8 +11,8 @@ public class LFUCache implements Cache {
     private final Map<Long, DoubleLinkedList> lists = new HashMap<>();
     private final Map<Long, Node> nodes = new HashMap<>();
     private final Map<Long, Long> freq = new HashMap<>();
-    Long minFreq = 1L;
-    Long size = 0L;
+    private Long minFreq = 1L;
+    private Long size = 0L;
     private final int CACHE_CAPACITY;
 
     public LFUCache(int cache_capacity) {
