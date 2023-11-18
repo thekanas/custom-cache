@@ -2,9 +2,9 @@ package by.stolybko.cache.impl;
 
 public class DoubleLinkedList {
 
-    Node head = new Node(0L, null);
-    Node tail = new Node(0L, null);
-    Long size = 0L;
+    private final Node head = new Node(0L, null);
+    private final Node tail = new Node(0L, null);
+    private Long size = 0L;
 
     public DoubleLinkedList() {
         head.setNext(tail);
@@ -29,12 +29,16 @@ public class DoubleLinkedList {
     }
 
     public Node remove(Node node) {
-        if(size <= 0) {
+        if (size <= 0) {
             return null;
         }
         node.getPrev().setNext(node.getNext());
         node.getNext().setPrev(node.getPrev());
         size--;
         return node;
+    }
+
+    public Long getSize() {
+        return size;
     }
 }

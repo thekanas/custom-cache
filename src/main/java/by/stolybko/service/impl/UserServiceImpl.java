@@ -11,23 +11,19 @@ import by.stolybko.mapper.UserMapper;
 import by.stolybko.service.UserService;
 import by.stolybko.validator.UserDtoValidator;
 import by.stolybko.validator.ValidationResult;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final Dao<Long, UserEntity> userDao = UserDaoImpl.getInstance();
-    private final UserMapper mapper = Mappers.getMapper(UserMapper.class);
-    private final UserDtoValidator validator = UserDtoValidator.getInstance();
-
-    private static final UserServiceImpl INSTANCE = new UserServiceImpl();
-
-    public static UserServiceImpl getInstance() {
-        return INSTANCE;
-    }
+    private final Dao<Long, UserEntity> userDao;
+    private final UserMapper mapper;
+    private final UserDtoValidator validator;
 
     @Override
     public UserResponseDTO getUserById(Long id) {
@@ -68,8 +64,11 @@ public class UserServiceImpl implements UserService {
         UserEntity user = mapper.toUserEntity(userDTO);
         user.setId(id);
 
-        UserEntity userSawed = userDao.update(user).get();
-        return mapper.toUserResponseDTO(userSawed);
+        Optional<UserEntity> userSawed = userDao.update(user);
+        if(userSawed.isEmpty()) {
+            throw new UserNotFoundException(id);
+        }
+        return mapper.toUserResponseDTO(userSawed.get());
     }
 
     @Override

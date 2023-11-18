@@ -5,7 +5,6 @@ import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import lombok.SneakyThrows;
@@ -13,9 +12,8 @@ import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 
-public class ConnectionPool {
+public final class ConnectionPool {
     private static final DataSource DATA_SOURCE;
     private static final String USER_KEY = "db.user";
     private static final String PASSWORD_KEY = "db.password";

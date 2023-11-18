@@ -55,20 +55,20 @@ public class CacheAspect {
     }
 
     @SuppressWarnings("unchecked")
-    @AfterReturning(value = "saveDaoMethod()" , returning = "result")
+    @AfterReturning(value = "saveDaoMethod()", returning = "result")
     public void cachingSave(Object result) {
         Optional<BaseEntity> entity = (Optional<BaseEntity>) result;
-        if(entity.isPresent()) {
+        if (entity.isPresent()) {
             cache.putInCache(entity.get().getId(), entity.get());
             System.out.println("put in cache");
         }
     }
 
     @SuppressWarnings("unchecked")
-    @AfterReturning(value = "updateDaoMethod()" , returning = "result")
+    @AfterReturning(value = "updateDaoMethod()", returning = "result")
     public void cachingUpdate(Object result) {
         Optional<BaseEntity> entity = (Optional<BaseEntity>) result;
-        if(entity.isPresent()) {
+        if (entity.isPresent()) {
             cache.putInCache(entity.get().getId(), entity.get());
             System.out.println("put in cache");
         }
@@ -76,8 +76,8 @@ public class CacheAspect {
 
     @AfterReturning(value = "deleteDaoMethod() && args(id) ", argNames = "id")
     public void cachingUpdate(Long id) {
-            cache.removeFromCache(id);
-            System.out.println("remove from cache");
+        cache.removeFromCache(id);
+        System.out.println("remove from cache");
     }
 
 }

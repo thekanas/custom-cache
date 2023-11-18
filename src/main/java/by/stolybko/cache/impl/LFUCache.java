@@ -21,7 +21,7 @@ public class LFUCache implements Cache {
 
     @Override
     public Object getFromCache(Long key) {
-        if(!nodes.containsKey(key)) {
+        if (!nodes.containsKey(key)) {
             return Optional.empty();
         }
         Node node = nodes.get(key);
@@ -32,19 +32,19 @@ public class LFUCache implements Cache {
 
     @Override
     public void putInCache(Long key, Object value) {
-        if(CACHE_CAPACITY <= 0 ) {
+        if (CACHE_CAPACITY <= 0) {
             return;
         }
-        if(nodes.containsKey(key)) {
+        if (nodes.containsKey(key)) {
             nodes.get(key).setValue(value);
             updateFrequency(key);
             return;
         }
-        if(size == CACHE_CAPACITY) {
+        if (size == CACHE_CAPACITY) {
             Node deleteNode = lists.get(minFreq).pop();
             nodes.remove(deleteNode.getKey());
             freq.remove(deleteNode.getKey());
-            if(lists.get(minFreq).size == 0) {
+            if (lists.get(minFreq).getSize() == 0) {
                 lists.remove(minFreq);
             }
             size--;
@@ -63,7 +63,7 @@ public class LFUCache implements Cache {
     public void removeFromCache(Long key) {
         nodes.remove(key);
         Long currentFreq = freq.remove(key);
-        if(lists.get(currentFreq).size == 0) {
+        if (lists.get(currentFreq).getSize() == 0) {
             lists.remove(currentFreq);
         }
         size--;
@@ -80,9 +80,9 @@ public class LFUCache implements Cache {
         Node node = lists.get(prevFreq + 1L).append(prevNode.getKey(), prevNode.getValue());
         nodes.put(key, node);
         freq.put(key, prevFreq + 1L);
-        if(lists.get(prevFreq).size == 0) {
+        if (lists.get(prevFreq).getSize() == 0) {
             lists.remove(prevFreq);
-            if(prevFreq.equals(minFreq)) {
+            if (prevFreq.equals(minFreq)) {
                 minFreq++;
             }
         }
