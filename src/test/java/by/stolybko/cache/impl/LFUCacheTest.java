@@ -33,6 +33,25 @@ class LFUCacheTest {
     }
 
     @Test
+    void getFromCacheShouldNotEmpty() {
+        // given
+        LFUCache<Long, String> lfuCache = new LFUCache<>(2);
+        lfuCache.putInCache(1L, "first");
+        lfuCache.getFromCache(1L);
+        lfuCache.putInCache(2L, "second");
+        lfuCache.putInCache(4L, "fourth");
+        lfuCache.putInCache(5L, "fifth");
+        lfuCache.putInCache(6L, "sixth");
+
+        // when
+        Optional<String> actual = lfuCache.getFromCache(1L);
+
+        // then
+        assertThat(actual.isPresent()).isTrue();
+        assertThat(actual.get()).isEqualTo("first");
+    }
+
+    @Test
     void putInCacheTest() {
         // given
         LFUCache<Long, String> lfuCache = new LFUCache<>(3);

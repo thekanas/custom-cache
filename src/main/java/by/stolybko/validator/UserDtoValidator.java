@@ -33,14 +33,14 @@ public class UserDtoValidator implements Validator<UserRequestDTO> {
             validationResult.add(Error.of("invalid.passportNumber", "Passport number cannot be null or empty"));
         }
 
-        if (userRequestDTO.getPassword() == null || userRequestDTO.getPassportNumber().isEmpty()) {
+        if (userRequestDTO.getPassword() == null || userRequestDTO.getPassword().isEmpty()) {
             validationResult.add(Error.of("invalid.password", "Password cannot be null or empty"));
         }
 
-        if (userRequestDTO.getEmail() == null || userRequestDTO.getPassportNumber().isEmpty()) {
+        if (userRequestDTO.getEmail() == null || userRequestDTO.getEmail().isEmpty()) {
             validationResult.add(Error.of("invalid.email", "Email cannot be null or empty"));
         }
-        else if (!userRequestDTO.getEmail().matches("^([a-z0-9_.-]+)@([\\da-z.-]+).([a-z.]{2,6})$")) {
+        else if (!userRequestDTO.getEmail().matches("^([a-z0-9_.-]+)@([\\da-z.-]+)\\.([a-z.]{2,6})$")) {
             validationResult.add(Error.of("invalid.email", "Email must be correct"));
         }
 
