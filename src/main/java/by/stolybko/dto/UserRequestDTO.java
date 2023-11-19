@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Представление-запрос информации клиента.
+ */
 @Data
 @Builder
 @AllArgsConstructor

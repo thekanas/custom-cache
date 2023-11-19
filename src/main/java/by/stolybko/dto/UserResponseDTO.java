@@ -4,6 +4,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Представление-ответ информации клиента.
+ */
 @Data
 @Builder
 @EqualsAndHashCode(of = "id")

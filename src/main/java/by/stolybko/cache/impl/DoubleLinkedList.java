@@ -1,5 +1,10 @@
 package by.stolybko.cache.impl;
 
+/**
+ * Объект, реализующий двухсвязанный список
+ * с возможностью удаления ноды за константное время.
+ *
+ */
 public class DoubleLinkedList<K, V> {
 
     private final Node<K, V>  head = new Node<>(null, null);
@@ -11,6 +16,11 @@ public class DoubleLinkedList<K, V> {
         tail.setPrev(head);
     }
 
+    /**
+     * Помещает переданные ключ и значение
+     * в ноду, которую затем помещает в связанный список.
+     *
+     */
     public Node<K, V>  append(K key, V value) {
         Node<K, V>  node = new Node<>(key, value);
 
@@ -24,15 +34,24 @@ public class DoubleLinkedList<K, V> {
         return node;
     }
 
+    /**
+     * Удаляет ноду с начала списка.
+     * Возвращает удаленную ноду.
+     *
+     */
     public Node<K, V>  pop() {
         return remove(head.getNext());
     }
 
+    /**
+     * Удаляет ноду из списка.
+     * Возвращает удаленную ноду.
+     *
+     */
     public Node<K, V>  remove(Node<K, V>  node) {
         if (size <= 0) {
             return null;
         }
-        //Node<K, V> temp = node.getPrev();
         node.getPrev().setNext(node.getNext());
         node.getNext().setPrev(node.getPrev());
         size--;

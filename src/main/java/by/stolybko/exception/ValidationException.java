@@ -2,7 +2,6 @@ package by.stolybko.exception;
 
 import lombok.Getter;
 import by.stolybko.validator.Error;
-
 import java.util.List;
 
 public class ValidationException extends RuntimeException {

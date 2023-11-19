@@ -15,6 +15,9 @@ import java.util.Optional;
 
 import static lombok.AccessLevel.PRIVATE;
 
+/**
+ * Класс предоставляющий доступ к данным клиентов в базе данных.
+ */
 @NoArgsConstructor(access = PRIVATE)
 public class UserDaoImpl implements Dao<Long, UserEntity> {
     private static final String SELECT_ALL = "SELECT user_id, full_name, passport_number, email FROM users";

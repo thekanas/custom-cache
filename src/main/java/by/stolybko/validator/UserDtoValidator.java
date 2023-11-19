@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
 
+/**
+ * Объект для валидации входящих представлений-запросов информации клиентов.
+ */
 @NoArgsConstructor(access = PRIVATE)
 public class UserDtoValidator implements Validator<UserRequestDTO> {
 

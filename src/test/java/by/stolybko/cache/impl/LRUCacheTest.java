@@ -11,20 +11,21 @@ class LRUCacheTest {
     @Test
     void getFromCacheTest() {
         // given
-        LRUCache cache = new LRUCache(3);
+        LRUCache<Long, String> cache = new LRUCache<>(3);
         cache.putInCache(1L, "first");
         cache.putInCache(2L, "second");
         cache.putInCache(3L, "third");
 
         // when
-        Optional<String> actual1 = (Optional<String>) cache.getFromCache(1L);
+        Optional<String> actual1 = cache.getFromCache(1L);
 
         // then
+        assertThat(actual1.isPresent()).isTrue();
         assertThat(actual1.get()).isEqualTo("first");
 
         // when
         cache.putInCache(4L, "fourth");
-        Optional<String> actual2 = (Optional<String>) cache.getFromCache(2L);
+        Optional<String> actual2 = cache.getFromCache(2L);
 
         // then
         assertThat(actual2).isEmpty();
@@ -33,28 +34,29 @@ class LRUCacheTest {
     @Test
     void putInCacheTest() {
         // given
-        LRUCache cache = new LRUCache(3);
+        LRUCache<Long, String> cache = new LRUCache<>(3);
         cache.putInCache(1L, "first");
         cache.putInCache(2L, "second");
         cache.putInCache(3L, "third");
 
         // when
         cache.putInCache(1L, "first+");
-        Optional<String> actual = (Optional<String>) cache.getFromCache(1L);
+        Optional<String> actual = cache.getFromCache(1L);
 
         // then
+        assertThat(actual.isPresent()).isTrue();
         assertThat(actual.get()).isEqualTo("first+");
     }
 
     @Test
     void removeFromCacheTest() {
         // given
-        LRUCache cache = new LRUCache(3);
+        LRUCache<Long, String> cache = new LRUCache<>(3);
         cache.putInCache(1L, "first");
 
         // when
         cache.removeFromCache(1L);
-        Optional<String> actual = (Optional<String>) cache.getFromCache(1L);
+        Optional<String> actual = cache.getFromCache(1L);
 
         // then
         assertThat(actual).isEmpty();

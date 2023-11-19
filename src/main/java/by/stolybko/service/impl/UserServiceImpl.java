@@ -1,7 +1,6 @@
 package by.stolybko.service.impl;
 
 import by.stolybko.dao.Dao;
-import by.stolybko.dao.impl.UserDaoImpl;
 import by.stolybko.dto.UserRequestDTO;
 import by.stolybko.dto.UserResponseDTO;
 import by.stolybko.entity.UserEntity;
@@ -12,12 +11,13 @@ import by.stolybko.service.UserService;
 import by.stolybko.validator.UserDtoValidator;
 import by.stolybko.validator.ValidationResult;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * сервисный класс клиентов банковской системы
+ */
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -25,6 +25,13 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
     private final UserDtoValidator validator;
 
+    /**
+     * Возвращает представление клиента по его идентификатору.
+     *
+     * @param id идентификатор клиента.
+     * @return представление клиента.
+     * @throws UserNotFoundException клиент не найден в базе данных
+     */
     @Override
     public UserResponseDTO getUserById(Long id) {
 
@@ -35,6 +42,11 @@ public class UserServiceImpl implements UserService {
         return mapper.toUserResponseDTO(user.get());
     }
 
+    /**
+     * Возвращает представления всех клиентов.
+     *
+     * @return список представлений клиентов.
+     */
     @Override
     public List<UserResponseDTO> getAll() {
         List<UserResponseDTO> users = new ArrayList<>();
@@ -44,6 +56,13 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
+    /**
+     * Сохраняет клиента в базе данных.
+     *
+     * @param user представление-запрос клиента.
+     * @return представление-ответ клиента.
+     * @throws ValidationException запрос не прошел валидацию
+     */
     @Override
     public UserResponseDTO save(UserRequestDTO user) {
         ValidationResult validationResult = validator.validate(user);
@@ -55,6 +74,15 @@ public class UserServiceImpl implements UserService {
         return mapper.toUserResponseDTO(userSawed);
     }
 
+    /**
+     * Обновляет информацию о клиенте в базе данных.
+     *
+     * @param userDTO представление-запрос клиента.
+     * @param id идентификатор обновляемого клиента.
+     * @return представление-ответ клиента.
+     * @throws ValidationException запрос не прошел валидацию
+     * @throws UserNotFoundException клиент не найден в базе данных
+     */
     @Override
     public UserResponseDTO update(UserRequestDTO userDTO, Long id) {
         ValidationResult validationResult = validator.validate(userDTO);
@@ -65,12 +93,17 @@ public class UserServiceImpl implements UserService {
         user.setId(id);
 
         Optional<UserEntity> userSawed = userDao.update(user);
-        if(userSawed.isEmpty()) {
+        if (userSawed.isEmpty()) {
             throw new UserNotFoundException(id);
         }
         return mapper.toUserResponseDTO(userSawed.get());
     }
 
+    /**
+     * Удаляет клиента из базы данных.
+     *
+     * @param id id идентификатор удаляемого клиента.
+     */
     @Override
     public void delete(Long id) {
         userDao.delete(id);

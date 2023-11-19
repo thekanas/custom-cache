@@ -4,6 +4,9 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Объект содержащий список ошибок валидации.
+ */
 public class ValidationResult {
 
     @Getter
