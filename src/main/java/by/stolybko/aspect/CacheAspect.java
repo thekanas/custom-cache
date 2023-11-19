@@ -58,7 +58,6 @@ public class CacheAspect {
         Optional<BaseEntity> cachedObj = cache.getFromCache(id);
 
         if (cachedObj.isPresent()) {
-            System.out.println("cache");
             return cachedObj;
         } else {
             Optional<BaseEntity> returnObj = (Optional<BaseEntity>) proceedingJoinPoint.proceed();
@@ -76,10 +75,7 @@ public class CacheAspect {
     @AfterReturning(value = "saveDaoMethod()", returning = "result")
     public void cachingSave(Object result) {
         Optional<BaseEntity> entity = (Optional<BaseEntity>) result;
-        if (entity.isPresent()) {
-            cache.putInCache(entity.get().getId(), entity.get());
-            System.out.println("put in cache");
-        }
+        entity.ifPresent(baseEntity -> cache.putInCache(baseEntity.getId(), baseEntity));
     }
 
     /**
@@ -90,10 +86,7 @@ public class CacheAspect {
     @AfterReturning(value = "updateDaoMethod()", returning = "result")
     public void cachingUpdate(Object result) {
         Optional<BaseEntity> entity = (Optional<BaseEntity>) result;
-        if (entity.isPresent()) {
-            cache.putInCache(entity.get().getId(), entity.get());
-            System.out.println("put in cache");
-        }
+        entity.ifPresent(baseEntity -> cache.putInCache(baseEntity.getId(), baseEntity));
     }
 
     /**
@@ -103,6 +96,5 @@ public class CacheAspect {
     @AfterReturning(value = "deleteDaoMethod() && args(id) ", argNames = "id")
     public void cachingUpdate(Long id) {
         cache.removeFromCache(id);
-        System.out.println("remove from cache");
     }
 }

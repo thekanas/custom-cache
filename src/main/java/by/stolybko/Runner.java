@@ -4,6 +4,7 @@ import by.stolybko.api.DeSerializer;
 import by.stolybko.api.Serializer;
 import by.stolybko.api.impl.DeSerializerImpl;
 import by.stolybko.api.impl.SerializerImpl;
+import by.stolybko.config.LiquibaseConfig;
 import by.stolybko.connection.ConnectionPool;
 import by.stolybko.dao.Dao;
 import by.stolybko.dao.impl.UserDaoImpl;
@@ -18,7 +19,7 @@ import org.mapstruct.factory.Mappers;
 
 public class Runner {
     public static void main(String[] args) throws LiquibaseException {
-        ConnectionPool.migrate();
+        LiquibaseConfig.migrate();
 
         final Dao<Long, UserEntity> userDao = UserDaoImpl.getInstance();
         final UserMapper mapper = Mappers.getMapper(UserMapper.class);
