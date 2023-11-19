@@ -1,16 +1,14 @@
 package by.stolybko.cache.impl;
 
 import by.stolybko.cache.Cache;
-import java.util.Deque;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
 
 public class LRUCache implements Cache {
 
-    private final Map<Long, Object> mapCache = new HashMap<>();
-    private final Deque<Long> deque = new LinkedList<>();
+    private final Map<Long, Node> nodes = new HashMap<>();
+    private final DoubleLinkedList list = new DoubleLinkedList();
     private final int CACHE_CAPACITY;
 
     public LRUCache(int cache_capacity) {
@@ -19,31 +17,31 @@ public class LRUCache implements Cache {
 
     @Override
     public Object getFromCache(Long key) {
-       Object current = null;
-
-        if (mapCache.containsKey(key)) {
-            current = mapCache.get(key);
-            deque.remove(key);
-            deque.addFirst(key);
+        if (!nodes.containsKey(key)) {
+            return Optional.empty();
         }
-        return Optional.ofNullable(current);
+
+        Node node = nodes.get(key);
+        list.remove(node);
+        list.append(node.getKey(), node.getValue());
+
+        return Optional.ofNullable(node.getValue());
     }
 
     @Override
     public void putInCache(Long key, Object value) {
-        if (mapCache.containsKey(key)) {
-            deque.remove(key);
-        } else if (deque.size() == CACHE_CAPACITY) {
-            Long temp = deque.removeLast();
-            mapCache.remove(temp);
+        if (nodes.containsKey(key)) {
+            list.remove(nodes.get(key));
+        } else if (list.getSize() == CACHE_CAPACITY) {
+            Node temp = list.pop();
+            nodes.remove(temp.getKey());
         }
-        deque.addFirst(key);
-        mapCache.put(key, value);
+        Node node = list.append(key, value);
+        nodes.put(key, node);
     }
 
     @Override
     public void removeFromCache(Long key) {
-        mapCache.remove(key);
-        deque.remove(key);
+        list.remove(nodes.remove(key));
     }
 }
