@@ -1,30 +1,50 @@
 package by.stolybko;
 
-import by.stolybko.cache.impl.LFUCache;
-import by.stolybko.cache.impl.LRUCache;
-import by.stolybko.entity.BaseEntity;
+import by.stolybko.api.DeSerializer;
+import by.stolybko.api.Serializer;
+import by.stolybko.api.impl.DeSerializerImpl;
+import by.stolybko.api.impl.SerializerImpl;
+import by.stolybko.connection.ConnectionPool;
+import by.stolybko.dao.Dao;
+import by.stolybko.dao.impl.UserDaoImpl;
+import by.stolybko.dto.UserRequestDTO;
+import by.stolybko.dto.UserResponseDTO;
 import by.stolybko.entity.UserEntity;
+import by.stolybko.mapper.UserMapper;
+import by.stolybko.service.impl.UserServiceImpl;
+import by.stolybko.validator.UserDtoValidator;
+import liquibase.exception.LiquibaseException;
+import org.mapstruct.factory.Mappers;
 
 public class Runner {
-    public static void main(String[] args) {
-        LRUCache<Long, BaseEntity> lfuCache = new LRUCache<>(3);
+    public static void main(String[] args) throws LiquibaseException {
+        ConnectionPool.migrate();
 
-        UserEntity user1 = UserEntity.builder().id(1L).build();
-        UserEntity user2 = UserEntity.builder().id(2L).build();
-        UserEntity user3 = UserEntity.builder().id(3L).build();
-        UserEntity user4 = UserEntity.builder().id(4L).build();
+        final Dao<Long, UserEntity> userDao = UserDaoImpl.getInstance();
+        final UserMapper mapper = Mappers.getMapper(UserMapper.class);
+        final UserDtoValidator validator = UserDtoValidator.getInstance();
 
-        lfuCache.putInCache(user1.getId(), user1);
-        lfuCache.putInCache(user2.getId(), user2);
-        lfuCache.putInCache(user3.getId(), user3);
-        lfuCache.putInCache(user4.getId(), user4);
+        UserServiceImpl userService = new UserServiceImpl(userDao, mapper, validator);
 
-        lfuCache.getFromCache(2L);
-        lfuCache.getFromCache(3L);
-        lfuCache.getFromCache(4L);
-        lfuCache.getFromCache(4L);
-        lfuCache.getFromCache(2L);
-        System.out.println();
+        String jsonRequest = """
+                {
+                    "fullName": "Yurii Sergeevich Ivanov",
+                    "passportNumber" : "0308767HB143",
+                    "password": "qwerty",
+                    "email": "googl@googl.com"
+                }
+                      """;
+
+        DeSerializer deSerializer = new DeSerializerImpl();
+        UserRequestDTO userRequestDTO = deSerializer.deSerializingJson(UserRequestDTO.class, jsonRequest);
+
+        UserResponseDTO userResponseDTO = userService.save(userRequestDTO);
+        userService.delete(userResponseDTO.getId());
+
+        Serializer serializer = new SerializerImpl();
+        String jsonResponse = serializer.serializingInJson(userResponseDTO);
+
+        System.out.println(jsonResponse);
 
     }
 }

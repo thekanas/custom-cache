@@ -1,6 +1,6 @@
 --liquibase formatted sql
 --changeset astolybko:1
-CREATE TABLE users
+CREATE TABLE IF NOT EXISTS users
 (
     user_id         BIGSERIAL PRIMARY KEY,
     full_name       VARCHAR(60)        NOT NULL,
