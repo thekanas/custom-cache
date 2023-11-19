@@ -3,21 +3,21 @@ package by.stolybko.aspect;
 import by.stolybko.cache.Cache;
 import by.stolybko.cache.CacheFactory;
 import by.stolybko.entity.BaseEntity;
+import by.stolybko.entity.UserEntity;
 import by.stolybko.util.PropertiesManager;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-
 import java.util.Optional;
 
 @Aspect
 public class CacheAspect {
 
-    private final Cache cache = CacheFactory.getCache(PropertiesManager.get("cacheAlgorithm"));
+    private final Cache<Long, BaseEntity> cache = CacheFactory.getCache(PropertiesManager.get("cacheAlgorithm"));
 
-    @Pointcut("within(by.stolybko.dao.*Dao)")
+    @Pointcut("within(by.stolybko.dao.impl.*DaoImpl)")
     public void isDaoLayer() {
     }
 
@@ -37,17 +37,18 @@ public class CacheAspect {
     public void deleteDaoMethod() {
     }
 
+    @SuppressWarnings("unchecked")
     @Around(value = "findByIdDaoMethod()")
     public Object cachingFindById(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
         Long id = (Long) proceedingJoinPoint.getArgs()[0];
-        Optional<?> cachedObj = (Optional<?>) cache.getFromCache(id);
+        Optional<BaseEntity> cachedObj =  cache.getFromCache(id);
 
         if (cachedObj.isPresent()) {
             System.out.println("cache");
             return cachedObj;
         } else {
-            Optional<?> returnObj = (Optional<?>) proceedingJoinPoint.proceed();
+            Optional<BaseEntity> returnObj = (Optional<BaseEntity>) proceedingJoinPoint.proceed();
             returnObj.ifPresent(o -> cache.putInCache(id, o));
 
             return returnObj;

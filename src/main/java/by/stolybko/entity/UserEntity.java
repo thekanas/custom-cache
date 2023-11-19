@@ -18,10 +18,10 @@ public class UserEntity extends BaseEntity {
 
     private Long id;
 
-    @NonNull
+    //@NonNull
     private String fullName;
 
-    @NonNull
+    //@NonNull
     private String passportNumber;
     private String email;
     private String password;

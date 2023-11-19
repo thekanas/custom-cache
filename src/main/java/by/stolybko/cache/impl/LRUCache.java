@@ -5,10 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class LRUCache implements Cache {
+/**
+ *
+ */
 
-    private final Map<Long, Node> nodes = new HashMap<>();
-    private final DoubleLinkedList list = new DoubleLinkedList();
+public class LRUCache<K, V> implements Cache<K, V> {
+
+    private final Map<K, Node<K, V>> nodes = new HashMap<>();
+    private final DoubleLinkedList<K, V> list = new DoubleLinkedList<>();
     private final int CACHE_CAPACITY;
 
     public LRUCache(int cache_capacity) {
@@ -16,12 +20,12 @@ public class LRUCache implements Cache {
     }
 
     @Override
-    public Object getFromCache(Long key) {
+    public Optional<V> getFromCache(K key) {
         if (!nodes.containsKey(key)) {
             return Optional.empty();
         }
 
-        Node node = nodes.get(key);
+        Node<K, V> node = nodes.get(key);
         list.remove(node);
         list.append(node.getKey(), node.getValue());
 
@@ -29,19 +33,19 @@ public class LRUCache implements Cache {
     }
 
     @Override
-    public void putInCache(Long key, Object value) {
+    public void putInCache(K key, V value) {
         if (nodes.containsKey(key)) {
             list.remove(nodes.get(key));
         } else if (list.getSize() == CACHE_CAPACITY) {
-            Node temp = list.pop();
+            Node<K, V> temp = list.pop();
             nodes.remove(temp.getKey());
         }
-        Node node = list.append(key, value);
+        Node<K, V> node = list.append(key, value);
         nodes.put(key, node);
     }
 
     @Override
-    public void removeFromCache(Long key) {
+    public void removeFromCache(K key) {
         list.remove(nodes.remove(key));
     }
 }

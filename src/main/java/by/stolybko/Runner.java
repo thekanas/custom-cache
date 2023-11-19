@@ -1,11 +1,13 @@
 package by.stolybko;
 
 import by.stolybko.cache.impl.LFUCache;
+import by.stolybko.cache.impl.LRUCache;
+import by.stolybko.entity.BaseEntity;
 import by.stolybko.entity.UserEntity;
 
 public class Runner {
     public static void main(String[] args) {
-        LFUCache lfuCache = new LFUCache(4);
+        LRUCache<Long, BaseEntity> lfuCache = new LRUCache<>(3);
 
         UserEntity user1 = UserEntity.builder().id(1L).build();
         UserEntity user2 = UserEntity.builder().id(2L).build();
@@ -20,6 +22,8 @@ public class Runner {
         lfuCache.getFromCache(2L);
         lfuCache.getFromCache(3L);
         lfuCache.getFromCache(4L);
+        lfuCache.getFromCache(4L);
+        lfuCache.getFromCache(2L);
         System.out.println();
 
     }

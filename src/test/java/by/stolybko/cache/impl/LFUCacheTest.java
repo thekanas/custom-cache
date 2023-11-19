@@ -1,13 +1,15 @@
 package by.stolybko.cache.impl;
 
 import org.junit.jupiter.api.Test;
+
 import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LFUCacheTest {
 
     @Test
-    void getFromCache() {
+    void getFromCacheTest() {
         // given
         LFUCache lfuCache = new LFUCache(3);
         lfuCache.putInCache(1L, "first");
@@ -30,7 +32,7 @@ class LFUCacheTest {
     }
 
     @Test
-    void putInCache() {
+    void putInCacheTest() {
         // given
         LFUCache lfuCache = new LFUCache(3);
         lfuCache.putInCache(1L, "first");
@@ -46,7 +48,7 @@ class LFUCacheTest {
     }
 
     @Test
-    void removeFromCache() {
+    void removeFromCacheTest() {
         // given
         LFUCache lfuCache = new LFUCache(3);
         lfuCache.putInCache(1L, "first");
