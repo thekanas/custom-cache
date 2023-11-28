@@ -7,3 +7,6 @@ db.pool.size: 10
 #LRU or LFU
 cacheAlgorithm: LRU
 cacheCapacity: 3
+
+
+pathToPrint: "resources"
