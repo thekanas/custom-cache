@@ -47,7 +47,7 @@ public class Runner {
         Serializer serializer = new SerializerImpl();
         String jsonResponse = serializer.serializingInJson(userResponseDTO);
 
-        Printer printer = new Printer();
+        Printer printer = Printer.getInstance();
         printer.print(userService.getAll(), PrinterType.PDF);
         printer.print(userResponseDTO, PrinterType.PDF);
 

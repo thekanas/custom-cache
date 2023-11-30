@@ -33,7 +33,7 @@ dependencies {
     //implementation 'com.itextpdf:itextpdf:5.5.13.3'
     implementation 'com.itextpdf:cleanup:4.0.1'
     implementation 'com.itextpdf:itext-core:8.0.2'
-    implementation 'org.apache.pdfbox:pdfbox:3.0.0'
+    //implementation 'org.apache.pdfbox:pdfbox:3.0.0'
 
     runtimeOnly 'org.postgresql:postgresql:42.6.0'
     implementation 'org.liquibase:liquibase-core:4.25.0'

@@ -48,6 +48,7 @@ public class UserTestData {
 
     public UserResponseDTO buildUserResponseDTO() {
         return UserResponseDTO.builder()
+                .id(id)
                 .fullName(fullName)
                 .passportNumber(passportNumber)
                 .build();

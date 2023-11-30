@@ -14,6 +14,8 @@ import java.util.List;
 
 public class PDFPrinter implements PrinterExecutor {
 
+    private final String template = "output/template.pdf";
+
 
     @SneakyThrows
     @Override
@@ -22,7 +24,7 @@ public class PDFPrinter implements PrinterExecutor {
         Class<?> clazz = obj.getClass();
         Field[] fields = clazz.getDeclaredFields();
 
-        try(PdfReader reader = new PdfReader( "output/template.pdf");
+        try(PdfReader reader = new PdfReader( template);
             PdfWriter writer = new PdfWriter(path + "-" + clazz.getSimpleName() + ".pdf");
             PdfDocument pdfDocument = new PdfDocument(reader, writer);
             Document document = new Document(pdfDocument)) {
@@ -45,7 +47,7 @@ public class PDFPrinter implements PrinterExecutor {
         Class<?> clazz = objectList.get(0).getClass();
         Field[] fields = clazz.getDeclaredFields();
 
-        try(PdfReader reader = new PdfReader("output/template.pdf");
+        try(PdfReader reader = new PdfReader(template);
             PdfWriter writer = new PdfWriter(path + "-" + clazz.getSimpleName() + "-table" + ".pdf");
             PdfDocument pdfDocument = new PdfDocument(reader, writer);
             Document document = new Document(pdfDocument)) {
@@ -63,7 +65,7 @@ public class PDFPrinter implements PrinterExecutor {
 
                 for (Field field : fields) {
                     PropertyDescriptor pd = new PropertyDescriptor(field.getName(), clazz);
-                    table.addCell(pd.getReadMethod().invoke(obj).toString());
+                    table.addCell( "" + pd.getReadMethod().invoke(obj));
                 }
             }
 
