@@ -18,7 +18,7 @@ public class Printer {
     private static Printer instance;
 
     public static Printer getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new Printer();
         }
         return instance;
@@ -28,7 +28,7 @@ public class Printer {
         PrinterExecutor printerExecutor = printerExecutorFactory.getPrinter(type);
         String pathName = path + LocalDateTime.now().format(formatter);
 
-        if(obj instanceof List<?> objects) {
+        if (obj instanceof List<?> objects) {
             printerExecutor.printTable(objects, pathName);
         } else {
             printerExecutor.printEntity(obj, pathName);

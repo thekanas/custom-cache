@@ -8,6 +8,7 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import lombok.SneakyThrows;
+
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -24,10 +25,10 @@ public class PDFPrinter implements PrinterExecutor {
         Class<?> clazz = obj.getClass();
         Field[] fields = clazz.getDeclaredFields();
 
-        try(PdfReader reader = new PdfReader( template);
-            PdfWriter writer = new PdfWriter(path + "-" + clazz.getSimpleName() + ".pdf");
-            PdfDocument pdfDocument = new PdfDocument(reader, writer);
-            Document document = new Document(pdfDocument)) {
+        try (PdfReader reader = new PdfReader(template);
+             PdfWriter writer = new PdfWriter(path + "-" + clazz.getSimpleName() + ".pdf");
+             PdfDocument pdfDocument = new PdfDocument(reader, writer);
+             Document document = new Document(pdfDocument)) {
 
             Paragraph paragraph = new Paragraph("Information about:").setMarginTop(150).setBold();
             document.add(paragraph);
@@ -47,10 +48,10 @@ public class PDFPrinter implements PrinterExecutor {
         Class<?> clazz = objectList.get(0).getClass();
         Field[] fields = clazz.getDeclaredFields();
 
-        try(PdfReader reader = new PdfReader(template);
-            PdfWriter writer = new PdfWriter(path + "-" + clazz.getSimpleName() + "-table" + ".pdf");
-            PdfDocument pdfDocument = new PdfDocument(reader, writer);
-            Document document = new Document(pdfDocument)) {
+        try (PdfReader reader = new PdfReader(template);
+             PdfWriter writer = new PdfWriter(path + "-" + clazz.getSimpleName() + "-table" + ".pdf");
+             PdfDocument pdfDocument = new PdfDocument(reader, writer);
+             Document document = new Document(pdfDocument)) {
 
             Paragraph paragraph = new Paragraph("All information").setMarginTop(150).setBold();
             document.add(paragraph);
@@ -65,7 +66,7 @@ public class PDFPrinter implements PrinterExecutor {
 
                 for (Field field : fields) {
                     PropertyDescriptor pd = new PropertyDescriptor(field.getName(), clazz);
-                    table.addCell( "" + pd.getReadMethod().invoke(obj));
+                    table.addCell("" + pd.getReadMethod().invoke(obj));
                 }
             }
 
