@@ -1,6 +1,7 @@
 package by.stolybko.config;
 
 import by.stolybko.connection.ConnectionPool;
+import by.stolybko.util.PropertiesManager;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -11,6 +12,7 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 import java.sql.Connection;
 
 public class LiquibaseConfig {
+
     public static void migrate() throws LiquibaseException {
         Connection connection = ConnectionPool.get();
         Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));

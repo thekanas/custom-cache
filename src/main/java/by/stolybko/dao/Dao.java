@@ -7,8 +7,9 @@ import java.util.Optional;
 public interface Dao<K extends Serializable, E> {
 
     List<E> findAll();
+    List<E> findAll(int limit, int offset);
     Optional<E> findById(K id);
     Optional<E> save(E entity);
     Optional<E> update(E entity);
-    boolean delete(K id);
+    void delete(K id);
 }

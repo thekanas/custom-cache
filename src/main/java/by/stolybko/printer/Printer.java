@@ -12,7 +12,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Printer {
 
-    private final String path = "output/";
+    //private final String path = "output/";
+    private final String path = "H:\\java+\\custom-cache\\output\\";
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyDDDA");
     private final PrinterExecutorFactory printerExecutorFactory = PrinterExecutorFactory.getInstance();
     private static Printer instance;

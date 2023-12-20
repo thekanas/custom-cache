@@ -1,6 +1,7 @@
 package by.stolybko.service.impl;
 
 import by.stolybko.dao.Dao;
+import by.stolybko.dao.impl.UserDaoImpl;
 import by.stolybko.dto.UserRequestDTO;
 import by.stolybko.dto.UserResponseDTO;
 import by.stolybko.entity.UserEntity;
@@ -11,6 +12,8 @@ import by.stolybko.service.UserService;
 import by.stolybko.validator.UserDtoValidator;
 import by.stolybko.validator.ValidationResult;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +27,12 @@ public class UserServiceImpl implements UserService {
     private final Dao<Long, UserEntity> userDao;
     private final UserMapper mapper;
     private final UserDtoValidator validator;
+
+    public UserServiceImpl() {
+        userDao = UserDaoImpl.getInstance();
+        mapper = Mappers.getMapper(UserMapper.class);
+        validator = UserDtoValidator.getInstance();
+    }
 
     /**
      * Возвращает представление клиента по его идентификатору.
@@ -51,6 +60,20 @@ public class UserServiceImpl implements UserService {
     public List<UserResponseDTO> getAll() {
         List<UserResponseDTO> users = new ArrayList<>();
         for (UserEntity user : userDao.findAll()) {
+            users.add(mapper.toUserResponseDTO(user));
+        }
+        return users;
+    }
+
+    /**
+     * Возвращает представления всех клиентов.
+     *
+     * @return список представлений клиентов.
+     */
+    @Override
+    public List<UserResponseDTO> getAll(int limit, int offset) {
+        List<UserResponseDTO> users = new ArrayList<>();
+        for (UserEntity user : userDao.findAll(limit, offset)) {
             users.add(mapper.toUserResponseDTO(user));
         }
         return users;

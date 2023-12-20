@@ -15,7 +15,8 @@ import java.util.List;
 
 public class PDFPrinter implements PrinterExecutor {
 
-    private final String template = "output/template.pdf";
+    //private final String template = "output/template.pdf";
+    private final String template = "H:\\java+\\custom-cache\\output\\template.pdf";
 
 
     @SneakyThrows
