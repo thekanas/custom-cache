@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/")
+@WebServlet("/users")
 public class UserServlet extends HttpServlet {
 
     private final UserService userService = new UserServiceImpl();
@@ -40,10 +40,10 @@ public class UserServlet extends HttpServlet {
             if (id == null) {
                 int page = 1;
                 int pageSize = 20;
-                if(req.getParameter("page") != null) {
+                if (req.getParameter("page") != null) {
                     page = Integer.parseInt(req.getParameter("page"));
                 }
-                if(req.getParameter("pageSize") != null) {
+                if (req.getParameter("pageSize") != null) {
                     pageSize = Integer.parseInt(req.getParameter("pageSize"));
                 }
                 List<UserResponseDTO> users = userService.getAll(pageSize, (page - 1) * pageSize);

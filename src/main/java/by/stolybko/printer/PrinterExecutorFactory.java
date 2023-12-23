@@ -10,7 +10,7 @@ public class PrinterExecutorFactory {
     private static PrinterExecutorFactory instance;
 
     public static PrinterExecutorFactory getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new PrinterExecutorFactory();
         }
         return instance;

@@ -5,55 +5,42 @@ import by.stolybko.printer.Printer;
 import by.stolybko.printer.PrinterType;
 import by.stolybko.service.UserService;
 import by.stolybko.service.impl.UserServiceImpl;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
+import lombok.SneakyThrows;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-@WebServlet("/generate/")
+@WebServlet("/download")
 public class OutServlet extends HttpServlet {
 
     private final Printer printer = Printer.getInstance();
     private final UserService userService = new UserServiceImpl();
-    private final PrinterType printerType = PrinterType.PDF;
 
+    @SneakyThrows
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+
         try {
             String id = req.getParameter("id");
+            PrinterType printerType = PrinterType.PDF;
+            byte[] output;
             if (id == null) {
-                int page = 1;
-                int pageSize = 20;
-                if(req.getParameter("page") != null) {
-                    page = Integer.parseInt(req.getParameter("page"));
-                }
-                if(req.getParameter("pageSize") != null) {
-                    pageSize = Integer.parseInt(req.getParameter("pageSize"));
-                }
-                List<UserResponseDTO> users = userService.getAll(pageSize, (page - 1) * pageSize);
-
-                printer.print(users, printerType);
-
-                resp.setContentType("text/html;charset=UTF-8");
-                resp.setStatus(200);
-                resp.getWriter().write("Документ создан");
-
+                List<UserResponseDTO> dtoList = userService.getAll();
+                output = printer.getDocAsBytes(dtoList, printerType);
 
             } else {
-
-                UserResponseDTO user = userService.getUserById(Long.valueOf(id));
-
-                printer.print(user, printerType);
-
-                resp.setContentType("text/html;charset=UTF-8");
-                resp.setStatus(200);
-                resp.getWriter().write("Документ создан");
+                UserResponseDTO dto = userService.getUserById(Long.valueOf(id));
+                output = printer.getDocAsBytes(dto, printerType);
             }
 
+            resp.setHeader("Content-Disposition", "attachment; filename=\"filename.pdf\"");
+            resp.setContentType("application/pdf");
+            resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+
+            resp.getOutputStream().write(output);
         } catch (Exception e) {
             resp.setStatus(400);
         }

@@ -31,7 +31,7 @@ class PDFPrinterTest {
                 "passportNumber: " + responseDTO.getPassportNumber();
 
         // when
-        printer.printEntity(responseDTO, "src/test/resources/pdfTest/");
+        printer.printEntity(responseDTO, "src/test/resources/pdfTest/-UserResponseDTO.pdf");
 
         // then
         assertDoesNotThrow(() -> new PdfReader("src/test/resources/pdfTest/-UserResponseDTO.pdf"));
@@ -70,7 +70,7 @@ class PDFPrinterTest {
                 responseDTO2.getPassportNumber();
 
         // when
-        printer.printTable(List.of(responseDTO1, responseDTO2), "src/test/resources/pdfTest/");
+        printer.printTable(List.of(responseDTO1, responseDTO2), "src/test/resources/pdfTest/-UserResponseDTO-table.pdf");
 
         // then
         assertDoesNotThrow(() -> new PdfReader("src/test/resources/pdfTest/-UserResponseDTO-table.pdf"));
