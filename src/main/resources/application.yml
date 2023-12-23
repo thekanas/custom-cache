@@ -9,6 +9,3 @@ cacheAlgorithm: LRU
 cacheCapacity: 3
 
 databaseAutoInitialization: true
-
-
-pathToPrint: "resources"

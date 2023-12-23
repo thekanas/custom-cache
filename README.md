@@ -1,4 +1,4 @@
-# Task
+# Task cache
 1. Создать любой gradle проект
 2. Проект должен быть совместим с java 17
 3. Придерживаться GitFlow: master -> develop -> feature/fix
@@ -58,7 +58,7 @@ ___
 ![reports](img/test1.png)
 
 # Update
-# Task
+# Task pattern
 
 1. Взять за основу проект с кешом
 2. Придерживаться GitFlow: master -> develop -> feature/fix
@@ -74,3 +74,51 @@ ___
 * Создан пакет printer содержащий класс Printer. Класс Printer реализован в виде синглтона и содержит (композиция) класс PrinterExecutorFactory (синглтон, SimpleFactory), который возвращает объект типа PrinterExecutor(интерфейс) в зависимости от типа печати(Enum). PrinterExecutor предоставляет методы printEntity и printTable (фабричный метод).
 ## Отчет о покрытии тестами:
 ![reports](img/test2.png)
+
+# Update
+# Task servlet
+
+1. Взять за основу проект из лекции паттернов
+2. Придерживаться GitFlow: master -> develop -> feature/fix
+3. Написать CRUD для всех таблиц
+4. Для метода .findAll() сделать пагинацию (по умолчанию 20 элементов на странице, если pagesize не задан)
+5. Сделать GET метод, для генерации чека в формате pdf (если товара не существует, тогда генерируем ошибку)
+6. Прикрутить возможность инициализации бд и наполнения её данными с помощью параметра в application.yml файле, т.е. чтобы при подъеме приложения,  приложение создавало схему, таблицы и наполняло таблицы данными
+7. Фильтры
+8. UI НЕ нужен
+---
+Примеры запросов:
+~~~
+вывод всех user'ов:
+GET http://localhost:8080/users
+
+вывод user'а по id:
+GET http://localhost:8080/users?id=1
+
+создание user'а:
+POST http://localhost:8080/users
+{
+    "fullName": "Olga Vasilevna Sugak",
+    "passportNumber": "108767HB136",
+    "password": "3223",
+    "email": "olga@mail.com"
+}
+
+обновление user'а:
+PUT http://localhost:8080/users?id=1
+{
+    "fullName": "Rit Vasilevna Sugak",
+    "passportNumber": "208767HB136",
+    "password": "3223",
+    "email": "rita@mail.com"
+}
+
+удаление user'а:
+DELETE http://localhost:8080/users?delete=1
+
+получение pdf с информацией о всех user'ах:
+GET http://localhost:8080/download
+
+получение pdf с информацией о user'е по id:
+GET http://localhost:8080/download?id=4
+~~~

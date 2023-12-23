@@ -4,8 +4,9 @@ import by.stolybko.dto.UserRequestDTO;
 import by.stolybko.dto.UserResponseDTO;
 import by.stolybko.entity.UserEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
     UserEntity toUserEntity(UserRequestDTO userRequestDTO);
