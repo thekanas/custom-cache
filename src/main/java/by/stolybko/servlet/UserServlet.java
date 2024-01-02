@@ -1,19 +1,24 @@
+
 package by.stolybko.servlet;
 
 import by.stolybko.api.DeSerializer;
 import by.stolybko.api.Serializer;
 import by.stolybko.api.impl.DeSerializerImpl;
 import by.stolybko.api.impl.SerializerImpl;
+import by.stolybko.config.AppConfig;
 import by.stolybko.dto.UserRequestDTO;
 import by.stolybko.dto.UserResponseDTO;
 import by.stolybko.exception.ValidationException;
 import by.stolybko.service.UserService;
 import by.stolybko.service.impl.UserServiceImpl;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,9 +27,19 @@ import java.util.stream.Collectors;
 @WebServlet("/users")
 public class UserServlet extends HttpServlet {
 
-    private final UserService userService = new UserServiceImpl();
+    private UserService userService;
     private final DeSerializer deSerializer = new DeSerializerImpl();
     private final Serializer serializer = new SerializerImpl();
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        userService = context.getBean(UserServiceImpl.class);
+    }
+
 
     /**
      * метод предоставляет операцию READ
@@ -33,6 +48,7 @@ public class UserServlet extends HttpServlet {
      * В случае успеха операции возвращается ответ с status code "200"
      * В случае ошибки операции возвращается ответ с status code "400"
      */
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
@@ -77,11 +93,13 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+
     /**
      * метод предоставляет операцию CREATE
      * В случае успеха операции возвращается ответ с status code "200"
      * В случае ошибки операции возвращается ответ с status code "400" или "404"
      */
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -102,12 +120,14 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+
     /**
      * метод предоставляет операцию UPDATE
      * обновляется сущность с указанным id
      * В случае успеха операции возвращается ответ с status code "200"
      * В случае ошибки операции возвращается ответ с status code "400" или "404"
      */
+
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -135,12 +155,14 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+
     /**
      * метод предоставляет операции DELETE
      * удаляется сущность с id равным значению параметра delete
      * В случае успеха операции возвращается ответ с status code "200"
      * В случае ошибки операции возвращается ответ с status code "400"
      */
+
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String delete = req.getParameter("delete");
@@ -152,3 +174,4 @@ public class UserServlet extends HttpServlet {
         }
     }
 }
+

@@ -2,12 +2,14 @@ package by.stolybko.validator;
 
 import by.stolybko.dto.UserRequestDTO;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import static lombok.AccessLevel.PRIVATE;
 
 /**
  * Объект для валидации входящих представлений-запросов информации клиентов.
  */
+@Component
 @NoArgsConstructor(access = PRIVATE)
 public class UserDtoValidator implements Validator<UserRequestDTO> {
 

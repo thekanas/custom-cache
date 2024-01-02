@@ -30,10 +30,15 @@ ext {
     mockitoVersion = '5.6.0'
     aspectjVersion = '1.9.20.1'
     mapstructVersion = '1.5.5.Final'
+    springVersion = '6.1.2'
 }
 
 dependencies {
     implementation ':json-de-serializer-1.0-SNAPSHOT:'
+
+    implementation "org.springframework:spring-core:${springVersion}"
+    implementation "org.springframework:spring-context:${springVersion}"
+    implementation 'com.zaxxer:HikariCP:5.0.0'
 
     implementation 'com.itextpdf:cleanup:4.0.1'
     implementation 'com.itextpdf:itext-core:8.0.2'
