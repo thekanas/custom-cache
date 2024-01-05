@@ -122,3 +122,10 @@ GET http://localhost:8080/download
 получение pdf с информацией о user'е по id:
 GET http://localhost:8080/download?id=4
 ~~~
+
+# Update
+# Task SpringCore
+
+1. Взять за основу проект из лекции сервлетов
+2. Придерживаться GitFlow: master -> develop -> feature/fix
+3. Перевести проект на Spring 6.1.2

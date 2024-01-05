@@ -1,14 +1,15 @@
 package by.stolybko.aspect;
 
 import by.stolybko.cache.Cache;
-import by.stolybko.cache.CacheFactory;
 import by.stolybko.entity.BaseEntity;
-import by.stolybko.util.PropertiesManager;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
+
 import java.util.Optional;
 
 /**
@@ -16,9 +17,11 @@ import java.util.Optional;
  * с помощью АОП.
  */
 @Aspect
+@Component
+@RequiredArgsConstructor
 public class CacheAspect {
 
-    private final Cache<Long, BaseEntity> cache = CacheFactory.getCache(PropertiesManager.get("cacheAlgorithm"));
+    private final Cache<Long, BaseEntity> cache;
 
     /**
      * Метод отфильтровывает точки соединения
@@ -48,7 +51,6 @@ public class CacheAspect {
      * Возвращает объект из кэша при его наличии.
      * Иначе, возвращает объект из базы данных
      * и помещает его в кэш.
-     *
      */
     @SuppressWarnings("unchecked")
     @Around(value = "findByIdDaoMethod()")
@@ -69,7 +71,6 @@ public class CacheAspect {
 
     /**
      * Помещает объект в кэш после его сохранения в базе данных.
-     *
      */
     @SuppressWarnings("unchecked")
     @AfterReturning(value = "saveDaoMethod()", returning = "result")
@@ -80,7 +81,6 @@ public class CacheAspect {
 
     /**
      * Помещает объект в кэш после его обновления в базе данных.
-     *
      */
     @SuppressWarnings("unchecked")
     @AfterReturning(value = "updateDaoMethod()", returning = "result")
@@ -91,7 +91,6 @@ public class CacheAspect {
 
     /**
      * Удаляет объект из кэша после его удаления из базы данных.
-     *
      */
     @AfterReturning(value = "deleteDaoMethod() && args(id) ", argNames = "id")
     public void cachingUpdate(Long id) {

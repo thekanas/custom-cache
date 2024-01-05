@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'war'
     id "io.freefair.lombok" version "6.5.1"
-    id "io.freefair.aspectj.post-compile-weaving" version "6.4.1"
     id 'jacoco'
 }
 
@@ -36,7 +35,6 @@ ext {
 dependencies {
     implementation ':json-de-serializer-1.0-SNAPSHOT:'
 
-    implementation "org.springframework:spring-core:${springVersion}"
     implementation "org.springframework:spring-context:${springVersion}"
     implementation 'com.zaxxer:HikariCP:5.0.0'
 
@@ -47,12 +45,14 @@ dependencies {
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 
     implementation 'org.liquibase:liquibase-core:4.25.0'
+
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
     implementation 'org.apache.tomcat:tomcat-jdbc:10.1.13'
+
     implementation "org.aspectj:aspectjrt:${aspectjVersion}"
     implementation "org.aspectj:aspectjweaver:${aspectjVersion}"
-    implementation "org.aspectj:aspectjtools:${aspectjVersion}"
 
     testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
     testImplementation 'org.assertj:assertj-core:3.24.2'

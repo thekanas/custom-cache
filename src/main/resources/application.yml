@@ -8,5 +8,5 @@ liquibase.changelog: db.changelog/db.changelog-master.yaml
 liquibase.databaseAutoInitialization: true
 
 #LRU or LFU
-cacheAlgorithm: LRU
-cacheCapacity: 3
+cache.algorithm: LRU
+cache.capacity: 3

@@ -4,8 +4,6 @@ import by.stolybko.dao.Dao;
 import by.stolybko.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;

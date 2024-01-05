@@ -3,42 +3,28 @@ package by.stolybko.servlet;
 
 import by.stolybko.api.DeSerializer;
 import by.stolybko.api.Serializer;
-import by.stolybko.api.impl.DeSerializerImpl;
-import by.stolybko.api.impl.SerializerImpl;
-import by.stolybko.config.AppConfig;
 import by.stolybko.dto.UserRequestDTO;
 import by.stolybko.dto.UserResponseDTO;
 import by.stolybko.exception.ValidationException;
 import by.stolybko.service.UserService;
-import by.stolybko.service.impl.UserServiceImpl;
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/users")
+@Component
+@RequiredArgsConstructor
 public class UserServlet extends HttpServlet {
 
-    private UserService userService;
-    private final DeSerializer deSerializer = new DeSerializerImpl();
-    private final Serializer serializer = new SerializerImpl();
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-
-        userService = context.getBean(UserServiceImpl.class);
-    }
+    private final UserService userService;
+    private final DeSerializer deSerializer;
+    private final Serializer serializer;
 
 
     /**
