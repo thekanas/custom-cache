@@ -1,0 +1,12 @@
+db.user: postgres
+db.password: postgres
+db.url: jdbc:postgresql://localhost:5432/custom_cache
+db.driver: org.postgresql.Driver
+db.pool.size: 10
+
+liquibase.changelog: db.changelog/db.changelog-master.yaml
+liquibase.databaseAutoInitialization: true
+
+#LRU or LFU
+cache.algorithm: LRU
+cache.capacity: 3

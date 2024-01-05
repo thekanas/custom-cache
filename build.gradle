@@ -1,27 +1,59 @@
 plugins {
     id 'java'
+    id 'war'
     id "io.freefair.lombok" version "6.5.1"
     id 'jacoco'
 }
 
 group 'by.stolybko'
-version '1.0-SNAPSHOT'
+version '1.1'
 
 java {
     sourceCompatibility = JavaLanguageVersion.of(17)
     targetCompatibility = JavaLanguageVersion.of(17)
 }
 
+war {
+    archiveName "servlets_app.war"
+}
+
 repositories {
     mavenCentral()
+    flatDir {
+        dirs "${project.rootDir}/libs"
+    }
 }
 
 ext {
     junitVersion = '5.9.2'
     mockitoVersion = '5.6.0'
+    aspectjVersion = '1.9.20.1'
+    mapstructVersion = '1.5.5.Final'
+    springVersion = '6.1.2'
 }
 
 dependencies {
+    implementation ':json-de-serializer-1.0-SNAPSHOT:'
+
+    implementation "org.springframework:spring-context:${springVersion}"
+    implementation 'com.zaxxer:HikariCP:5.0.0'
+
+    implementation 'com.itextpdf:cleanup:4.0.1'
+    implementation 'com.itextpdf:itext-core:8.0.2'
+
+    runtimeOnly 'org.postgresql:postgresql:42.6.0'
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+
+    implementation 'org.liquibase:liquibase-core:4.25.0'
+
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+    implementation 'org.apache.tomcat:tomcat-jdbc:10.1.13'
+
+    implementation "org.aspectj:aspectjrt:${aspectjVersion}"
+    implementation "org.aspectj:aspectjweaver:${aspectjVersion}"
+
     testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
     testImplementation 'org.assertj:assertj-core:3.24.2'
 
